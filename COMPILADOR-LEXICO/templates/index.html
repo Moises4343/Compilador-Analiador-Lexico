@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Compilador con Analizador Léxico</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <h1>Ingresa tu código fuente:</h1>
+                <form method="POST" action="/">
+                    <textarea class="form-control" name="codigo_fuente" rows="10">{{ codigo_fuente }}</textarea>
+                    <br>
+                    <button type="submit" class="btn btn-primary">Analizar</button>
+                    <button type="button" class="btn btn-danger" onclick="borrarTexto()">Borrar</button>
+                </form>
+                {% if tokens %}
+                <h2>Contador de Tokens:</h2>
+                <table class="table table-striped table-hover table-bordered border-primary">
+                    <thead>
+                        <tr>
+                            <th scope="col">Token</th>
+                            <th scope="col">Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, value in token_counts.items() %}
+                        <tr>
+                            <td>{{ key }}</td>
+                            <td>{{ value }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+            </div>
+            <script>
+                function borrarTexto() {
+                    document.getElementsByName("codigo_fuente")[0].value = "";
+                }
+            </script>
+            <div class="col-md-6">
+                <h1>Resultados:</h1>
+                {% if tokens %}
+                <table class="table table-striped table-hover table-bordered border-primary">
+                    <thead>
+                        <tr>
+                            <th scope="col">Token</th>
+                            <th scope="col">Palabra Reservada</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Cadena</th>
+                            <th scope="col">Asignación</th>
+                            <th scope="col">Número</th>
+                            <th scope="col">Símbolo</th>
+                            <th scope="col">Operación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for token in tokens %}
+                        <tr>
+                            <td>{{ token.value }}</td>
+                            <td>{{ 'X' if token.type == 'PALABRA_RESERVADA' else '' }}</td>
+                            <td>{{ 'X' if token.type == 'ID' else '' }}</td>
+                            <td>{{ 'X' if token.type == 'CADENA' else '' }}</td>
+                            <td>{{ 'X' if token.type == 'ASIGNACION' else '' }}</td>
+                            <td>{{ 'X' if token.type == 'ENTERO' else '' }}</td>
+                            <td>{{ 'X' if token.type == 'SIMBOLO' else '' }}</td>
+                            <td>{{ 'X' if token.type == 'OPERACION' else '' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>No se encontraron tokens.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
